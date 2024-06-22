@@ -14,18 +14,68 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User?   @relation(fields: [authorId], references: [id])
-  authorId  Int?
+model User {
+  id          Int       @id @default(autoincrement())
+  type        Int
+  email       String    @unique
+  password    String
+  displayName String?
+  displayImg  String?
+  about       String?
+  Posts       Post[]    @relation("Post")
+  PostLikes   PostLike[]
+  GroupMemberships GroupMembership[]
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+model Group {
+  id          Int             @id @default(autoincrement())
+  name        String
+  desc        String?
+  displayImg  String?
+  GroupMemberships GroupMembership[]
+  GroupPost  GroupPost[]
+}
+
+model GroupMembership {
+  groupId     Int
+  userId      Int
+  role        String?
+  joinedAt    DateTime @default(now())
+
+  Group       Group    @relation(fields: [groupId], references: [id])
+  User        User     @relation(fields: [userId], references: [id])
+  
+  @@id([groupId, userId])
+}
+
+model GroupPost {
+  groupId     Int
+  postId      Int
+
+  Group       Group    @relation(fields: [groupId], references: [id])
+  Post        Post     @relation(fields: [postId], references: [id])
+
+  @@id([groupId, postId])
+}
+
+model Post {
+  id          Int       @id @default(autoincrement())
+  postedBy    Int
+  title       String?
+  body        String?
+  tags        String[]
+  verified    Int?
+  User        User      @relation("Post", fields: [postedBy], references: [id])
+  PostLikes   PostLike[]
+  GroupPost  GroupPost[]
+}
+
+model PostLike {
+  postId      Int
+  userId      Int
+
+  Post        Post      @relation(fields: [postId], references: [id])
+  User        User      @relation(fields: [userId], references: [id])
+
+  @@id([postId, userId])
 }
