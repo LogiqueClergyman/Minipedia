@@ -1,13 +1,20 @@
 import express from 'express';
 import createApolloGraphqlServer from './graphql';
 import { expressMiddleware } from '@apollo/server/express4';
-
+import mongoose from "mongoose";
 
 async function init() {
     const app = express();
     const PORT = Number(process.env.PORT) || 8000;
 
     app.use(express.json());
+
+    mongoose.connect(process.env.MONGO_URI).then(() => {
+        console.log("Connected to MongoDB");
+      }
+      ).catch((err) => {
+        console.log("Error connecting to MongoDB", err);
+      });
 
     const gqlServer = await createApolloGraphqlServer();
 
