@@ -9,21 +9,23 @@ async function init() {
 
     app.use(express.json());
 
-    const gqlServer = await createApolloGraphqlServer();
 
-    // CREATE GRAPHQL SERVER
-    app.use('/graphql', expressMiddleware(gqlServer));
-   
-    app.get('/', (req, res) => {
-        res.json({
-            msg: "server is up and running"
-        });
-    });
 
-   
-    app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
-    });
-}
+const gqlServer = new ApolloServer({
+  typeDefs: ``,
+  resolvers: {
+    Query: {},
+    Mutation: {},
+  },
+});
 
-init();
+// Start the gql server
+await gqlServer.start();
+
+app.get("/", (req, res) => {
+  res.json({ message: "Server is up and running" });
+});
+
+app.use("/graphql", expressMiddleware(gqlServer));
+
+app.listen(PORT, () => console.log(`Server started at PORT:${PORT}`));

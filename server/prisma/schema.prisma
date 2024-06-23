@@ -67,7 +67,7 @@ model Post {
   verified    Int?
   User        User      @relation("Post", fields: [postedBy], references: [id])
   PostLikes   PostLike[]
-  GroupPost  GroupPost[]
+  GroupPost   GroupPost[]
 }
 
 model PostLike {
