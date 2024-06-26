@@ -19,12 +19,13 @@ model User {
   type        Int
   email       String    @unique
   password    String
-  displayName String?
+  displayName String
   displayImg  String?
   about       String?
   Posts       Post[]    @relation("Post")
   PostLikes   PostLike[]
   GroupMemberships GroupMembership[]
+  salt        String
 }
 
 model Group {
