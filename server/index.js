@@ -1,7 +1,11 @@
 import express from 'express';
-import createApolloGraphqlServer from './graphql';
+import createApolloGraphqlServer from './graphql/index.js';
 import { expressMiddleware } from '@apollo/server/express4';
 import mongoose from "mongoose";
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 
 async function init() {
     const app = express();
@@ -9,12 +13,12 @@ async function init() {
 
     app.use(express.json());
 
-    mongoose.connect(process.env.MONGO_URI).then(() => {
-        console.log("Connected to MongoDB");
-      }
-      ).catch((err) => {
-        console.log("Error connecting to MongoDB", err);
-      });
+    // mongoose.connect(process.env.MONGO_URI).then(() => {
+    //     console.log("Connected to MongoDB");
+    //   }
+    //   ).catch((err) => {
+    //     console.log("Error connecting to MongoDB", err);
+    //   });
 
     const gqlServer = await createApolloGraphqlServer();
 
