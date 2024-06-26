@@ -1,3 +1,10 @@
 
-export const mutations = ``;
+export const mutations = `#graphql
+    type Mutation {
+        createPost(title: String!, body: String!, tags: [String], postedBy: ID!): Post
+        updatePost(id: ID!, title: String, body: String, tags: [String]): Post
+        deletePost(id: ID!): boolean
+        verifyPost(id, ID!): Post
+    }
+`;
 
