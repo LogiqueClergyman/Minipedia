@@ -1,5 +1,14 @@
-const queries = {}
+import { createUser } from '../../routes.js/authentication.js'; 
 
-const mutations = {}
+const queries = {};
 
-export const resolvers = {queries, mutations};
+const mutations = {
+    
+  User: async (_, { displayName, displayImg, email, type, password }) => {
+    console.log("hiiii");
+    const newUser = await createUser({ displayName, displayImg, email, type, password });
+    return "bn gya";
+  },
+};
+
+export const resolvers = { queries, mutations };
