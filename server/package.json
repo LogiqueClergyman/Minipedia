@@ -13,10 +13,11 @@
   "description": "",
   "dependencies": {
     "@apollo/server": "^4.10.4",
-    "@prisma/client": "^5.15.0",
+    "@prisma/client": "^5.15.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "graphql": "^16.8.2",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.7.0",
     "mongoose": "^8.4.3",
     "nodemon": "^3.1.3",

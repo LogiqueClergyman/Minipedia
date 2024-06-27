@@ -2,7 +2,7 @@ export const typeDefs = `
 type User {
      id: Int
      type: Int
-     email: String
+     email: String!
      displayName: String
      displayImg: String
      about: String

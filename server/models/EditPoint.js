@@ -1,6 +1,6 @@
 import Mongoose from 'mongoose';
 const EditPoint = new Mongoose.Schema({
-    post_id: {
+    postId: {
         type: String,
         required: true
     },

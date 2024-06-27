@@ -16,15 +16,18 @@ datasource db {
 
 model User {
   id               Int               @id @default(autoincrement())
-  type             Int
+  level            Int               @default(0)
   email            String            @unique
   password         String
-  displayName      String?
+  Name             String?           @default("")
+  UserName         String            @unique @default("")
+  Gender           String            @default("")
   displayImg       String?
   about            String?
   Posts            Post[]            @relation("Post")
   PostLikes        PostLike[]
   GroupMemberships GroupMembership[]
+  salt             String
 }
 
 model Group {
@@ -63,12 +66,13 @@ model Post {
   postedBy    Int
   title       String?
   body        String?
-  tags        String[]
+  tags        String[]      @default([])
   verified    Int?          @default(0)
   User        User          @relation("Post", fields: [postedBy], references: [id])
-  PostLikes   PostLike[]
   GroupPost   GroupPost[]
   PostComment PostComment[]
+  EditHistory String[]      @default([])
+  PostLike    PostLike[]
 }
 
 model PostLike {

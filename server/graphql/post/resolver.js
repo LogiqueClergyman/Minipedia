@@ -1,5 +1,7 @@
 const queries = {}
 
-const mutations = {}
+const mutations = {
+    createPost: async(_, {title, body, tags,})
+}
 
 export const resolvers = {queries, mutations};
