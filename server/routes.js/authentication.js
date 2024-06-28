@@ -1,29 +1,54 @@
 import { PrismaClient } from '@prisma/client';
 import { createHmac, randomBytes } from 'node:crypto';
+import JWT from "jsonwebtoken";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const prismaClient = new PrismaClient();
 
 const generateHash = (salt, password) => {
   return createHmac('sha256', salt).update(password).digest('hex');
 };
-// let[]arr = [];
+
 const createUser = async (data) => {
-  const { displayName, displayImg, email, type, password } = data;
+  const { Name, UserName, displayImg, email, level, password } = data;
+  const user = await prismaClient.user.findUnique({ where: { UserName } });
+  if (user) {
+    return "User already exists";
+  }
   const salt = randomBytes(32).toString('hex');
   const hashedPassword = generateHash(salt, password);
-  console.log(displayName+" "+ displayImg+" "+ email+" " +type+" "+ password);
-  console.log("hii");
-  const res = await prismaClient.user.create({
+  const person = await prismaClient.user.create({
     data: {
-      displayName,
+      Name,
+      UserName,
       displayImg,
       email,
-      type,
+      level,
       password: hashedPassword,
       salt,
     },
   });
-  console.log(res);
+
+  return person.UserName;
 };
 
-export { createUser };
+
+const loginUser = async(data) =>{
+  const {UserName , password} = data;
+  const user = await prismaClient.user.findUnique({ where: { UserName } });
+  if (!user) return "user not found";
+
+  const userSalt = user.salt;
+  const usersHashPassword = generateHash(userSalt, password);
+  if (usersHashPassword !== user.password)
+    return "Incorrect Password";
+
+  const token = JWT.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET);
+  return token;
+}
+
+
+
+export { createUser ,loginUser };

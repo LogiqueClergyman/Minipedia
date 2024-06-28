@@ -7,7 +7,7 @@ async function createApolloGraphqlServer() {
   console.log(mut)
   const typdefs = `#graphql
     type Query {
-      hello: String
+     ${User.queries}
     }
     type Mutation {
       ${User.mutations}
