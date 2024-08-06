@@ -1,13 +1,14 @@
 import { ApolloServer } from "@apollo/server";
-import { User } from "./User/index.js";
-import { createUser } from "../routes.js/authentication.js";
-
+import { User } from "./user/index.js";
+import { Post } from "./post/index.js";
+import { Group } from "./group/index.js";
 async function createApolloGraphqlServer() {
-  const mut = User.resolvers.mutations;
-  console.log(mut)
   const typdefs = `#graphql
+    ${User.typeDefs}
+    ${Post.typeDefs}
+    ${Group.typeDefs}
     type Query {
-      hello: String
+      ${User.queries}
     }
     type Mutation {
       ${User.mutations}

@@ -6,7 +6,6 @@ import dotenv from "dotenv";
 import { decodeUser } from "./services/authentication.js";
 dotenv.config();
 
-
 async function init() {
   const app = express();
   const PORT = Number(process.env.PORT) || 8000;
@@ -20,19 +19,19 @@ async function init() {
   //     console.log("Error connecting to MongoDB", err);
   //   });
 
-  const gqlServer = await createApolloGraphqlServer();
+  // const gqlServer = ;
 
   // CREATE GRAPHQL SERVER
   app.use(
     "/graphql",
-    expressMiddleware(gqlServer, {
-      context: ({ req }) => {
+    expressMiddleware(await createApolloGraphqlServer(), {
+      context: async ({ req }) => {
+        const token = req.headers["token"];
         try {
-          const token = req.headers.authorization || "";
           const user = decodeUser(token);
-          return user;
+          return {user};
         } catch (error) {
-          return null;
+          return {};
         }
       },
     })

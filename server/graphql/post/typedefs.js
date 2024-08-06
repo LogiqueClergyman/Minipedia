@@ -6,7 +6,7 @@ export const typeDefs = `#graphql
         tags: [String]
         verified: Int
         User: User
-        PostLikes: [PostLike]
-        GroupPost: [GroupPost]
+        PostLikes: [User]
+        GroupPost: [Group]
     }
 `;

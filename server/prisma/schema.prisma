@@ -16,17 +16,18 @@ datasource db {
 
 model User {
   id               Int               @id @default(autoincrement())
-  level            Int               @default(0)
+  userName         String            @unique
   email            String            @unique
   password         String
-  Name             String?           @default("")
-  UserName         String            @unique @default("")
-  Gender           String            @default("")
+  name             String?           @default("")
+  gender           String            @default("")
   displayImg       String?
   about            String?
-  Posts            Post[]            @relation("Post")
-  PostLikes        PostLike[]
-  GroupMemberships GroupMembership[]
+  type             String            @default("user")
+  level            Int               @default(0)
+  posts            Post[]            @relation("Post")
+  postLikes        PostLike[]
+  groupMemberships GroupMembership[]
   salt             String
 }
 
@@ -35,8 +36,8 @@ model Group {
   name             String
   desc             String?
   displayImg       String?
-  GroupMemberships GroupMembership[]
-  GroupPost        GroupPost[]
+  groupMemberships GroupMembership[]
+  groupPost        GroupPost[]
 }
 
 model GroupMembership {
@@ -63,16 +64,16 @@ model GroupPost {
 
 model Post {
   id          Int           @id @default(autoincrement())
-  postedBy    Int
   title       String?
   body        String?
+  postedBy    Int
   tags        String[]      @default([])
   verified    Int?          @default(0)
   User        User          @relation("Post", fields: [postedBy], references: [id])
-  GroupPost   GroupPost[]
-  PostComment PostComment[]
-  EditHistory String[]      @default([])
-  PostLike    PostLike[]
+  groupPost   GroupPost[]
+  postComment PostComment[]
+  editHistory String[]      @default([])
+  postLike    PostLike[]
 }
 
 model PostLike {

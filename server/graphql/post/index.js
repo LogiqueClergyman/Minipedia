@@ -1,6 +1,5 @@
-import { mutations } from './mutations';
-import { queries } from './queries';
-import { typeDefs } from './typedef';
-import { resolvers } from './resolvers';
-
+import { queries } from './queries.js';
+import { typeDefs } from './typedefs.js';
+import { resolvers } from './resolvers.js';
+import { mutations } from './mutations.js';
 export const Post = {typeDefs , queries , mutations , resolvers};

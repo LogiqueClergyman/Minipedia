@@ -1,13 +1,21 @@
-import { createUser } from '../../services/authentication.js'; 
+import { createUser, loginUser } from "../../services/authentication.js";
 
-const queries = {};
+const queries = {
+  login: async (_, { email, password }) => {
+    const token = await loginUser({ email, password });
+    return token;
+  },
+};
 
 const mutations = {
-    
-  User: async (_, { displayName, displayImg, email, type, password }) => {
-    console.log("hiiii");
-    const newUser = await createUser({ displayName, displayImg, email, type, password });
-    return "bn gya";
+  User: async (_, { userName, displayImg, email, password }) => {
+    const newUser = await createUser({
+      userName,
+      displayImg,
+      email,
+      password,
+    });
+    return newUser.id;
   },
 };
 
