@@ -9,18 +9,31 @@ async function createApolloGraphqlServer() {
     ${Group.typeDefs}
     type Query {
       ${User.queries}
+      ${Post.queries}
+      ${Group.queries}
     }
     type Mutation {
       ${User.mutations}
-    }` 
+      ${Post.mutations}
+      ${Group.mutations}
+    }`;
   const resolvers = {
     Query: {
       ...User.resolvers.queries,
+      ...Post.resolvers.queries,
+      ...Group.resolvers.queries,
     },
     Mutation: {
-      ...User.resolvers.mutations
+      ...User.resolvers.mutations,
+      ...Post.resolvers.mutations,
+      ...Group.resolvers.mutations,
     },
-  }
+    Post: {
+      ...Post.resolvers.Post,
+    },
+  };
+
+  // console.log(typdefs);
   const gqlServer = new ApolloServer({
     typeDefs: typdefs,
     resolvers: resolvers,

@@ -5,7 +5,7 @@ export const typeDefs = `#graphql
         body: String!
         tags: [String]
         verified: Int
-        User: User
+        postedBy: User!
         PostLikes: [User]
         GroupPost: [Group]
     }

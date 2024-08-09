@@ -27,11 +27,13 @@ async function init() {
     expressMiddleware(await createApolloGraphqlServer(), {
       context: async ({ req }) => {
         const token = req.headers["token"];
+        // console.log(token)
         try {
-          const user = decodeUser(token);
+          const user = await decodeUser(token);
+          // console.log(user)
           return {user};
         } catch (error) {
-          return {};
+          return null;
         }
       },
     })

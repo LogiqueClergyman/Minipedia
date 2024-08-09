@@ -1,7 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import { createHmac, randomBytes } from "node:crypto";
 import jwt from "jsonwebtoken";
-const prismaClient = new PrismaClient();
+const prismaClient = new PrismaClient({
+  // log: ["query", "info", "warn", "error"],
+});
 
 const generateHash = (salt, password) => {
   return createHmac("sha256", salt).update(password).digest("hex");
@@ -11,10 +13,10 @@ const createUser = async (data) => {
   const { userName, displayImg, email, password } = data;
   const salt = randomBytes(32).toString("hex");
   const hashedPassword = generateHash(salt, password);
-  console.log(
-    userName + " " + displayImg + " " + email + " " + password
-  );
-  console.log("hii");
+  // console.log(
+  //   userName + " " + displayImg + " " + email + " " + password
+  // );
+  // console.log("hii");
   const res = await prismaClient.user.create({
     data: {
       userName,
@@ -24,38 +26,36 @@ const createUser = async (data) => {
       salt,
     },
   });
-  console.log(res);
+  // console.log(res);
   return res;
 };
 
 const getUser = async (id) => {
+  // console.log("id: ",id)
+  const userId = parseInt(id, 10);
   try {
     const user = await prismaClient.user.findUnique({
       where: {
-        id,
+        id: userId,
       },
     });
+    // console.log("user: ",user);
     return user;
   } catch (error) {
     return null;
   }
 };
 
-const isOwner = (user, id) => {
-  return user.id === id;
-};
-
-const isVerifier = (user) => {
-  return user.type == "verifier";
-};
-
 const decodeUser = async (token) => {
   try {
+    // console.log("decoding: ",token);
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await getUser(decoded.id);
-    return {user};
+    // console.log("decoded: ",decoded);
+    const user = await getUser(decoded);
+    // console.log(user);
+    return user ;
   } catch (error) {
-    return {};
+    return null;
   }
 };
 
@@ -79,4 +79,4 @@ const loginUser = async (data) => {
 const getUserToken = (id) => {
   return jwt.sign(id, process.env.JWT_SECRET);
 };
-export { createUser, decodeUser, loginUser, isOwner, isVerifier };
+export { createUser, decodeUser, loginUser };
