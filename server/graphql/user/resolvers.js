@@ -1,18 +1,21 @@
-import { createUser ,loginUser } from '../../routes.js/authentication.js'; 
+import { createUser, loginUser } from "../../services/authentication.js";
 
 const queries = {
-  login : async (_, {UserName, password}) =>{
-    const token = await loginUser({UserName,password});
+  login: async (_, { email, password }) => {
+    const token = await loginUser({ email, password });
     return token;
-  }
+  },
 };
 
 const mutations = {
-    
-  User: async (_, { Name,UserName, displayImg, email, level, password }) => {
- 
-    const newUser = await createUser({ Name,UserName, displayImg, email, level, password });
-    return newUser;
+  User: async (_, { userName, displayImg, email, password }) => {
+    const newUser = await createUser({
+      userName,
+      displayImg,
+      email,
+      password,
+    });
+    return newUser.id;
   },
 };
 

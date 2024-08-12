@@ -1,25 +1,39 @@
 import { ApolloServer } from "@apollo/server";
-import { User } from "./User/index.js";
-import { createUser } from "../routes.js/authentication.js";
-
+import { User } from "./user/index.js";
+import { Post } from "./post/index.js";
+import { Group } from "./group/index.js";
 async function createApolloGraphqlServer() {
-  const mut = User.resolvers.mutations;
-  console.log(mut)
   const typdefs = `#graphql
+    ${User.typeDefs}
+    ${Post.typeDefs}
+    ${Group.typeDefs}
     type Query {
-     ${User.queries}
+      ${User.queries}
+      ${Post.queries}
+      ${Group.queries}
     }
     type Mutation {
       ${User.mutations}
-    }` 
+      ${Post.mutations}
+      ${Group.mutations}
+    }`;
   const resolvers = {
     Query: {
       ...User.resolvers.queries,
+      ...Post.resolvers.queries,
+      ...Group.resolvers.queries,
     },
     Mutation: {
-      ...User.resolvers.mutations
+      ...User.resolvers.mutations,
+      ...Post.resolvers.mutations,
+      ...Group.resolvers.mutations,
     },
-  }
+    Post: {
+      ...Post.resolvers.Post,
+    },
+  };
+
+  // console.log(typdefs);
   const gqlServer = new ApolloServer({
     typeDefs: typdefs,
     resolvers: resolvers,

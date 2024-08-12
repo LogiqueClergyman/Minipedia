@@ -15,70 +15,82 @@ datasource db {
 }
 
 model User {
-  id          Int       @id @default(autoincrement())
-  level       Int      @default(0)
-  email       String    @unique
-  password    String
-  Name        String?   @default("")
-  UserName    String    @unique    @default("")
-  Gender      String    @default("")
-  displayImg  String?
-  about       String?
-  Posts       Post[]    @relation("Post")
-  PostLikes   PostLike[]
-  GroupMemberships GroupMembership[]
-  salt        String
+  id               Int               @id @default(autoincrement())
+  userName         String            @unique
+  email            String            @unique
+  password         String
+  name             String?           @default("")
+  gender           String            @default("")
+  displayImg       String?
+  about            String?
+  type             String            @default("user")
+  level            Int               @default(0)
+  posts            Post[]            @relation("Post")
+  postLikes        PostLike[]
+  groupMemberships GroupMembership[]
+  salt             String
+}
+
+model Post {
+  id          Int           @id @default(autoincrement())
+  title       String?
+  body        String?
+  postedBy    Int
+  tags        String[]      @default([])
+  verified    Int?          @default(0)
+  User        User          @relation("Post", fields: [postedBy], references: [id])
+  groupPost   GroupPost[]
+  postComment PostComment[]
+  editHistory String[]      @default([])
+  postLike    PostLike[]
 }
 
 model Group {
-  id          Int             @id @default(autoincrement())
-  name        String
-  desc        String?
-  displayImg  String?
-  GroupMemberships GroupMembership[]
-  GroupPost  GroupPost[]
+  id               Int               @id @default(autoincrement())
+  name             String
+  desc             String?
+  displayImg       String?
+  groupMemberships GroupMembership[]
+  groupPost        GroupPost[]
 }
 
 model GroupMembership {
-  groupId     Int
-  userId      Int
-  role        String?
-  joinedAt    DateTime @default(now())
+  groupId  Int
+  userId   Int
+  role     String?
+  joinedAt DateTime @default(now())
 
-  Group       Group    @relation(fields: [groupId], references: [id])
-  User        User     @relation(fields: [userId], references: [id])
-  
+  Group Group @relation(fields: [groupId], references: [id])
+  User  User  @relation(fields: [userId], references: [id])
+
   @@id([groupId, userId])
 }
 
 model GroupPost {
-  groupId     Int
-  postId      Int
+  groupId Int
+  postId  Int
 
-  Group       Group    @relation(fields: [groupId], references: [id])
-  Post        Post     @relation(fields: [postId], references: [id])
+  Group Group @relation(fields: [groupId], references: [id])
+  Post  Post  @relation(fields: [postId], references: [id])
 
   @@id([groupId, postId])
 }
 
-model Post {
-  id          Int       @id @default(autoincrement())
-  postedBy    Int
-  title       String?
-  body        String?
-  tags        String[]
-  verified    Int?
-  User        User      @relation("Post", fields: [postedBy], references: [id])
-  PostLikes   PostLike[]
-  GroupPost   GroupPost[]
-}
-
 model PostLike {
-  postId      Int
-  userId      Int
+  postId Int
+  userId Int
 
-  Post        Post      @relation(fields: [postId], references: [id])
-  User        User      @relation(fields: [userId], references: [id])
+  Post Post @relation(fields: [postId], references: [id])
+  User User @relation(fields: [userId], references: [id])
 
   @@id([postId, userId])
+}
+
+model PostComment {
+  postId    Int
+  commentId String
+
+  Post Post @relation(fields: [postId], references: [id])
+
+  @@id([postId, commentId])
 }

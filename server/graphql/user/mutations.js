@@ -1,3 +1,3 @@
-
-export const mutations = `User(Name: String, UserName:String!, displayImg: String, email: String!, level: Int!, password: String!): String`;
-
+export const mutations = `#graphql
+    User(userName: String!, displayImg: String, email: String!, password: String!): String
+`;

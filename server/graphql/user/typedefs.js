@@ -1,19 +1,17 @@
-export const typeDefs = `
+export const typeDefs = `#graphql
 type User {
-     id: Int
+     id: ID!
      type: Int
      email: String!
      displayName: String
      displayImg: String
      about: String
      Posts: [Post]
-     PostLikes: [PostLike]
-     GroupMemberships: [GroupMembership]
+     PostLikes: [Post]
+     GroupMemberships: [Group]
      darkMode: Boolean
-     lastLogin: Date
+     lastLogin: String
      streak: Int
      notifications: [String]
-   }
-
-
+}
 `;
