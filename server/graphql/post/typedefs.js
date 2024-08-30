@@ -8,5 +8,6 @@ export const typeDefs = `#graphql
         postedBy: User!
         PostLikes: [User]
         GroupPost: [Group]
+        # PostComment: [Comments]
     }
 `;

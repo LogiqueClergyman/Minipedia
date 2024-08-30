@@ -5,6 +5,8 @@ import {
   verifyPost,
   getPosts,
   getPost,
+  likePost,
+  unlikePost,
 } from "../../services/posts.js";
 import { isAuthenticated, isVerifier } from "../../services/validations.js";
 import { PrismaClient } from "@prisma/client";
@@ -41,6 +43,14 @@ const mutations = {
   verifyPost: isVerifier(async (_, { id }, context) => {
     const verifiedPost = await verifyPost(id, context.user.id);
     return verifiedPost;
+  }),
+  likePost: isAuthenticated(async (_, { id }, context) => {
+    const likedPost = await likePost(id, context.user.id);
+    return likedPost;
+  }),
+  unlikePost: isAuthenticated(async (_, { id }, context) => {
+    const unlikedPost = await unlikePost(id, context.user.id);
+    return unlikedPost;
   }),
 };
 const Post = {
